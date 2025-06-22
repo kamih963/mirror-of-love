@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mirror of Love</title>
+  <style>
+    body {
+      background: radial-gradient(circle at center, #0D0D1A 0%, #000010 100%);
+      color: #FFD700;
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      padding: 3em;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 1em;
+      letter-spacing: 1px;
+      color: #F7CAC9;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2em;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+      display: inline-block;
+    }
+
+    input, select, button {
+      background: transparent;
+      border: 1px solid #FFD700;
+      color: #FFD700;
+      padding: 0.7em;
+      margin-top: 1em;
+      font-size: 1em;
+      border-radius: 8px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 10px #FFD700;
+    }
+
+    button {
+      background: #FFD700;
+      color: #0D0D1A;
+      cursor: pointer;
+    }
+
+    canvas {
+      border: 2px solid #F7CAC9;
+      border-radius: 50%;
+      margin-top: 1em;
+      box-shadow: 0 0 20px #FFD700;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #userWord {
+      margin-top: 1.5em;
+      font-size: 1.3em;
+      color: #F7CAC9;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>What is your shape when you are whole?</h1>
+  </header>
+
+  <main>
+    <form id="loveForm">
+      <label for="shape">Choose your shape:</label><br/>
+      <select id="shape">
+        <option value="spiral">Spiral</option>
+        <option value="sphere">Sphere</option>
+        <option value="flame">Flame</option>
+      </select><br/>
+
+      <label for="color">Pick your color:</label><br/>
+      <input type="color" id="color" value="#4B0082"/><br/>
+
+      <label for="word">Your word of wholeness:</label><br/>
+      <input type="text" id="word" placeholder="e.g., Peace" /><br/>
+
+      <button type="submit">Reflect</button>
+    </form>
+
+    <section id="reflection" class="hidden">
+      <canvas id="visualOutput" width="300" height="300"></canvas>
+      <p id="userWord"></p>
+    </section>
+  </main>
+
+  <audio id="ambientSound" src="assets/ambient.mp3" loop autoplay></audio>
+
+  <script>
+    document.getElementById('loveForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const shape = document.getElementById('shape').value;
+      const color = document.getElementById('color').value;
+      const word = document.getElementById('word').value;
+      const canvas = document.getElementById('visualOutput');
+      const ctx = canvas.getContext('2d');
+      const ambient = document.getElementById('ambientSound');
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Set background color
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Sacred glow effect
+      ctx.shadowColor = "#FFD700";
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = "#ffffff";
+
+      if (shape === "spiral") {
+        for (let i = 0; i < 70; i++) {
+          const r = i * 2;
+          const angle = i * 0.3;
+          const x = 150 + r * Math.cos(angle);
+          const y = 150 + r * Math.sin(angle);
+          ctx.beginPath();
+          ctx.arc(x, y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else if (shape === "sphere") {
+        ctx.beginPath();
+        ctx.arc(150, 150, 80, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (shape === "flame") {
+        ctx.beginPath();
+        ctx.moveTo(150, 150);
+        ctx.bezierCurveTo(180, 100, 180, 200, 150, 230);
+        ctx.bezierCurveTo(120, 200, 120, 100, 150, 150);
+        ctx.fill();
+      }
+
+      // Display word
+      document.getElementById('userWord').textContent = `"${word}"`;
+      document.getElementById('reflection').classList.remove('hidden');
+
+      // Set volume
+      ambient.volume = 0.3;
+    });
+  </script>
+</body>
+</html>
+
